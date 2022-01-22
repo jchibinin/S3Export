@@ -13,7 +13,7 @@ public class LogParser {
     }
 
     public void handleFolder() throws IOException {
-        liftpath = Properties.lift_path + System.currentTimeMillis() + ".log";
+        liftpath = PropertiesLocal.lift_path + System.currentTimeMillis() + ".log";
         for (Path file : filesInFolder) {
             //берем только rphost
             if (file.toString().contains("rphost"))            {

@@ -5,15 +5,46 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class S3JavaSDKExample {
 
 
     public static void main(String[] args) throws Exception {
+
+        if (args!=null&&args.length>0){
+
+            String propertiesFile = args[0];
+            String path = S3JavaSDKExample.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+            String decodedPath = URLDecoder.decode(path, "UTF-8");
+            decodedPath = decodedPath + "/" + propertiesFile;
+
+            Properties prop = new Properties();
+
+            try {
+                //обращаемся к файлу и получаем данные
+                FileInputStream fileInputStream = new FileInputStream(decodedPath);
+                prop.load(fileInputStream);
+
+                PropertiesLocal.access_key_id     = prop.getProperty("access_key_id");
+                PropertiesLocal.secret_access_key = prop.getProperty("secret_access_key");
+                PropertiesLocal.logcfg_path       = prop.getProperty("logcfg_path");
+                PropertiesLocal.folders_path      = prop.getProperty("folders_path");
+                PropertiesLocal.lift_path         = prop.getProperty("lift_path");
+                PropertiesLocal.template_path     = prop.getProperty("template_path");
+                PropertiesLocal.bucketname        = prop.getProperty("bucketname");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else throw new Exception("No properties file detected");
 
         List<Path> pathToHandle = null;
 
@@ -57,9 +88,9 @@ public class S3JavaSDKExample {
 
     public static void SendToS3(Path fileToSend) throws Exception {
 
-        BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(Properties.access_key_id, Properties.secret_access_key);
+        BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(PropertiesLocal.access_key_id, PropertiesLocal.secret_access_key);
 
-        String bucket_name = "techjournal";
+        String bucket_name = PropertiesLocal.bucketname;
 
         final String file_path = fileToSend.toString();
         String key_name = fileToSend.getFileName().toString();

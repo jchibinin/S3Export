@@ -17,11 +17,11 @@ public class LogcfgHandler {
 
     public void UpdateLogcfgFile() throws URISyntaxException {
 
-       File file = new File(Properties.template_path);
+       File file = new File(PropertiesLocal.template_path);
        try( BufferedReader fileReader = new BufferedReader(new FileReader(file));
-            BufferedWriter fileWriter = new BufferedWriter(new FileWriter(Properties.logcfg_path))){
+            BufferedWriter fileWriter = new BufferedWriter(new FileWriter(PropertiesLocal.logcfg_path))){
 
-           String path = Properties.folders_path+folderName;
+           String path = PropertiesLocal.folders_path+folderName;
            while (fileReader.ready()){
                String line = fileReader.readLine();
                fileWriter.write(line.replaceAll("_change_",path));
@@ -33,7 +33,7 @@ public class LogcfgHandler {
 
     public List<Path> getPaths(){
         List<Path> filesInFolder = null;
-        String path         = Properties.folders_path+folderName; // установить папку
+        String path         = PropertiesLocal.folders_path+folderName; // установить папку
         try {
             filesInFolder = Files.walk(Paths.get(path))//"c:/tmp/1/"))
                     .filter(Files::isRegularFile)
@@ -52,6 +52,6 @@ public class LogcfgHandler {
     }
 
     public String getFolderPath() {
-        return Properties.folders_path+folderName;
+        return PropertiesLocal.folders_path+folderName;
     }
 }
