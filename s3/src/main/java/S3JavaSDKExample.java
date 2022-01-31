@@ -1,13 +1,12 @@
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -22,15 +21,12 @@ public class S3JavaSDKExample {
         if (args!=null&&args.length>0){
 
             String propertiesFile = args[0];
-            String path = S3JavaSDKExample.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-            String decodedPath = URLDecoder.decode(path, "UTF-8");
-            decodedPath = decodedPath + "/" + propertiesFile;
 
             Properties prop = new Properties();
 
             try {
                 //обращаемся к файлу и получаем данные
-                FileInputStream fileInputStream = new FileInputStream(decodedPath);
+                FileInputStream fileInputStream = new FileInputStream(propertiesFile);
                 prop.load(fileInputStream);
 
                 PropertiesLocal.access_key_id     = prop.getProperty("access_key_id");
